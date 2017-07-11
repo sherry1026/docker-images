@@ -3,7 +3,8 @@ ENV NGINX_VERSION 1.12.0
 # install php exts
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
-        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libmcrypt-dev libxml2-dev tzdata \
+        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata \
+    && apk add --no-cache libmcrypt-dev \
     && pecl channel-update pecl.php.net \
     && pecl install mongodb \
     && pecl install redis \
