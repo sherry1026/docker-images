@@ -148,6 +148,10 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     && rm -rf /var/cache/apk/* \
     && rm -rf /etc/supervisord.conf
 
+RUN set -x \
+    && addgroup -g 555 -S www \
+    && adduser -u 555 -D -S -G www www
+
 COPY supervisord.conf /etc/supervisord.conf
 
 COPY start.sh /start.sh
