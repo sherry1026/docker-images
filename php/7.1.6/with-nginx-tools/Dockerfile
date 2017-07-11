@@ -3,7 +3,7 @@ ENV NGINX_VERSION 1.12.0
 # install php exts
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
-        $PHPIZE_DEPS openssl-dev pcre-dev supervisor dcron libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libmcrypt-dev libxml2-dev tzdata \
+        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libmcrypt-dev libxml2-dev tzdata \
     && pecl channel-update pecl.php.net \
     && pecl install mongodb \
     && pecl install redis \
@@ -12,8 +12,7 @@ RUN apk update \
     && docker-php-ext-install gd \
     && docker-php-ext-enable opcache bcmath exif gd mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip mongodb redis \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo "Asia/Shanghai" >  /etc/timezone
-
+    && echo "Asia/Shanghai" >  /etc/timezone \
 # install nginx
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     && CONFIG="\
@@ -146,7 +145,8 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     && apk del .phpdeps \
     && rm -rf /tmp/pear/* \
     && rm -rf /var/cache/apk/* \
-    && rm -rf /etc/supervisord.conf
+    && rm -rf /etc/supervisord.conf \
+    && apk add --no-cache supervisor dcron
 
 RUN set -x \
     && addgroup -g 555 -S www \
