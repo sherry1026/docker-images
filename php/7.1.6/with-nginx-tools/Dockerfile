@@ -3,7 +3,7 @@ ENV NGINX_VERSION 1.12.0
 # install php exts
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
-        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata libiconv \
+        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata \
     && apk add --no-cache libmcrypt-dev \
     && pecl channel-update pecl.php.net \
     && pecl install mongodb \
@@ -136,13 +136,13 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     && rm -rf /var/cache/apk/* \
     && rm -rf /etc/supervisord.conf \
     && apk add --no-cache supervisor dcron
-
-RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv
-ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
-
-RUN set -x \
+#fix iconv
+RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gnu-libiconv \
+    && set -x \
     && addgroup -g 555 -S www \
     && adduser -u 555 -D -S -G www www
+ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
+
 
 COPY supervisord.conf /etc/supervisord.conf
 
