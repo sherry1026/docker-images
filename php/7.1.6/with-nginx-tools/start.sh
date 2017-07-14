@@ -1,5 +1,5 @@
-nginx
-php-fpm
-supervisord -c /etc/supervisord.conf
-crond
-top
+supervisord -c /etc/supervisord.conf \
+&& crond \
+&& nginx \
+&& php-fpm \
+&& top
