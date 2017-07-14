@@ -142,9 +142,9 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
     && addgroup -g 555 -S www \
     && adduser -u 555 -D -S -G www www \
     && chmod -R 777 /run \
-    && chmod -R 777 /var/log
+    && chmod -R 777 /var/log \
+    && chmod -R 777 /usr/sbin 
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
-
 
 COPY supervisord.conf /etc/supervisord.conf
 
