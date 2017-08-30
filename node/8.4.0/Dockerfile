@@ -63,6 +63,6 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
   && ln -s /opt/yarn/bin/yarn /usr/local/bin/yarn \
   && ln -s /opt/yarn/bin/yarn /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-  && apk del .build-deps-yarn
-  && npm install -g cnpm --registry=https://registry.npm.taobao.org
+  && apk del .build-deps-yarn \
+  && npm install -g cnpm --registry=https://registry.npm.taobao.org \
   && npm -g config set registry https://registry.npm.taobao.org
