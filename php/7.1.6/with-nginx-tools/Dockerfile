@@ -16,14 +16,18 @@ RUN apk update \
     
 COPY instantclient-basic-linux.x64-12.2.0.1.0.zip ./
 RUN unzip instantclient-basic-linux.x64-12.2.0.1.0.zip \
-    && cp -rf instantclient_12_2/*.* /usr/lib/ \
+    && mv instantclient_12_2/libclntsh.so.12.1 /usr/lib/libclntsh.so.12.1 \
+    && mv instantclient_12_2/libocci.so.12.1 /usr/lib/libocci.so.12.1 \
+    && mv instantclient_12_2/libociei.so /usr/lib/libociei.so \
+    && mv instantclient_12_2/libnnz12.so /usr/lib/libnnz12.so \
     && rm instantclient-basic-linux.x64-12.2.0.1.0.zip \
+    && rm -rf instantclient_12_2 \
     && ldconfig \
     && pecl install oci8
-ENV ORACLE_BASE /usr/lib
-ENV LD_LIBRARY_PATH /usr/lib
-ENV TNS_ADMIN /usr/lib
-ENV ORACLE_HOME /usr/lib
+ENV ORACLE_BASE /usr/lib/
+ENV LD_LIBRARY_PATH /usr/lib/
+ENV TNS_ADMIN /usr/lib/
+ENV ORACLE_HOME /usr/lib/
 
 # install nginx
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
