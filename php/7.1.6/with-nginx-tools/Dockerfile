@@ -1,11 +1,6 @@
 FROM php:7.1.6-fpm-alpine
 ENV NGINX_VERSION 1.12.0
-ENV ORACLE_BASE /usr/lib/instantclient_12_2
-ENV TNS_ADMIN /usr/lib/instantclient_12_2
-ENV ORACLE_HOME /usr/lib/instantclient_12_2
-ENV LD_LIBRARY_PATH=/usr/lib/instantclient_12_2:$LD_LIBRARY_PATH
 # install php exts
-COPY instantclient-basiclite-linux.x64-12.2.0.1.0.zip ./
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
         $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata libaio libmcrypt-dev \
@@ -17,12 +12,23 @@ RUN apk update \
     && docker-php-ext-install gd \
     && docker-php-ext-enable opcache bcmath exif gd mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip mongodb redis \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo "Asia/Shanghai" >  /etc/timezone \
-    && unzip instantclient-basiclite-linux.x64-12.2.0.1.0.zip \
+    && echo "Asia/Shanghai" >  /etc/timezone
+    
+COPY instantclient-basiclite-linux.x64-12.2.0.1.0.zip ./
+RUN unzip instantclient-basic-linux.x64-12.2.0.1.0.zip \
     && mv instantclient_12_2/ /usr/lib/ \
-    && rm instantclient-basiclite-linux.x64-12.2.0.1.0.zip \
+    && rm instantclient-basic-linux.x64-12.2.0.1.0.zip \
+    && ln /usr/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/libclntsh.so \
+    && ln /usr/lib/instantclient_12_2/libocci.so.12.1 /usr/lib/libocci.so \
+    && ln /usr/lib/instantclient_12_2/libociei.so /usr/lib/libociei.so \
+    && ln /usr/lib/instantclient_12_2/libnnz12.so /usr/lib/libnnz12.so \
     && ldconfig \
-    && pecl install oci8 \
+    && pecl install oci8
+ENV ORACLE_BASE /usr/lib/instantclient_12_2
+ENV LD_LIBRARY_PATH /usr/lib/instantclient_12_2
+ENV TNS_ADMIN /usr/lib/instantclient_12_2
+ENV ORACLE_HOME /usr/lib/instantclient_12_2
+
 # install nginx
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     && CONFIG="\
