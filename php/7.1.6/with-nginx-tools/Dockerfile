@@ -20,10 +20,10 @@ RUN unzip instantclient-basic-linux.x64-12.2.0.1.0.zip \
     && rm instantclient-basic-linux.x64-12.2.0.1.0.zip \
     && ldconfig \
     && pecl install oci8
-ENV ORACLE_BASE /usr/lib/instantclient_12_2
-ENV LD_LIBRARY_PATH /usr/lib/instantclient_12_2
-ENV TNS_ADMIN /usr/lib/instantclient_12_2
-ENV ORACLE_HOME /usr/lib/instantclient_12_2
+ENV ORACLE_BASE /usr/lib
+ENV LD_LIBRARY_PATH /usr/lib
+ENV TNS_ADMIN /usr/lib
+ENV ORACLE_HOME /usr/lib
 
 # install nginx
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
