@@ -1,20 +1,28 @@
 FROM php:7.1.6-fpm-alpine
 ENV NGINX_VERSION 1.12.0
+ENV ORACLE_BASE /usr/lib/instantclient_12_1
+ENV LD_LIBRARY_PATH /usr/lib/instantclient_12_1
+ENV TNS_ADMIN /usr/lib/instantclient_12_1
+ENV ORACLE_HOME /usr/lib/instantclient_12_1
 # install php exts
+COPY instantclient_12_1.zip ./
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
-        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata \
+        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata libaio \
     && apk add --no-cache libmcrypt-dev \
     && pecl channel-update pecl.php.net \
     && pecl install mongodb \
     && pecl install redis \
-    && pecl install oci8 \
     && docker-php-ext-install opcache bcmath exif mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd \
     && docker-php-ext-enable opcache bcmath exif gd mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip mongodb redis \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" >  /etc/timezone \
+    && unzip instantclient_12_1.zip && \
+    && mv instantclient_12_1/ /usr/lib/ && \
+    && rm instantclient_12_1.zip && \
+    && pecl install oci8 \
 # install nginx
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     && CONFIG="\
