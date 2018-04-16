@@ -8,8 +8,7 @@ ENV ORACLE_HOME /usr/lib/instantclient_12_1
 COPY instantclient_12_1.zip ./
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
-        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata libaio \
-    && apk add --no-cache libmcrypt-dev \
+        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata libaio libmcrypt-dev \
     && pecl channel-update pecl.php.net \
     && pecl install mongodb \
     && pecl install redis \
@@ -20,8 +19,8 @@ RUN apk update \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" >  /etc/timezone \
     && unzip instantclient_12_1.zip && \
-    && mv instantclient_12_1/ /usr/lib/ && \
-    && rm instantclient_12_1.zip && \
+    && mv instantclient_12_1/ /usr/lib/ \
+    && rm instantclient_12_1.zip \
     && pecl install oci8 \
 # install nginx
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
