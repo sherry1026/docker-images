@@ -21,7 +21,6 @@ RUN apk update \
     && unzip instantclient-basiclite-linux.x64-12.2.0.1.0.zip \
     && mv instantclient_12_2/ /usr/lib/ \
     && rm instantclient-basiclite-linux.x64-12.2.0.1.0.zip \
-    && sh -c "echo /opt/oracle/instantclient_12_2 > /etc/ld.so.conf.d/oracle-instantclient.conf" \
     && ldconfig \
     && pecl install oci8 \
 # install nginx
