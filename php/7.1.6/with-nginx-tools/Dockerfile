@@ -18,7 +18,7 @@ RUN apk update \
     && docker-php-ext-enable opcache bcmath exif gd mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip mongodb redis \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" >  /etc/timezone \
-    && unzip instantclient_12_1.zip && \
+    && unzip instantclient_12_1.zip \
     && mv instantclient_12_1/ /usr/lib/ \
     && rm instantclient_12_1.zip \
     && pecl install oci8 \
