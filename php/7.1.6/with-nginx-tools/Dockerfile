@@ -16,7 +16,7 @@ RUN apk update \
     
 COPY instantclient-basic-linux.x64-12.2.0.1.0.zip ./
 RUN unzip instantclient-basic-linux.x64-12.2.0.1.0.zip \
-    && mv instantclient_12_2/*.* /usr/lib/ \
+    && cp -rf instantclient_12_2/*.* /usr/lib/ \
     && rm instantclient-basic-linux.x64-12.2.0.1.0.zip \
     && ldconfig \
     && pecl install oci8
