@@ -18,7 +18,7 @@ RUN apk update \
     && docker-php-ext-enable opcache bcmath exif gd mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip mongodb redis \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" >  /etc/timezone \
-    && unzip instantclient-basiclite-linux.x64-12.2.0.1.0.zipp \
+    && unzip instantclient-basiclite-linux.x64-12.2.0.1.0.zip \
     && mv instantclient_12_2/ /usr/lib/ \
     && rm instantclient-basiclite-linux.x64-12.2.0.1.0.zip \
     && sh -c "echo /opt/oracle/instantclient_12_2 > /etc/ld.so.conf.d/oracle-instantclient.conf" \
