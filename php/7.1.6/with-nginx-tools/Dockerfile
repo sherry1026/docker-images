@@ -1,6 +1,5 @@
 FROM php:7.1.6-fpm-alpine
 ENV NGINX_VERSION 1.12.0
-ENV ORACLE_HOME /usr/lib/oracle/12.2/client64/lib/instantclient_12_2/
 # install php exts
 COPY instantclient-basic-linux.x64-12.2.0.1.0.zip ./
 COPY instantclient-sdk-linux.x64-12.2.0.1.0.zip ./
