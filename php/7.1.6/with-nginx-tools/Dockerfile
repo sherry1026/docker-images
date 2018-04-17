@@ -3,6 +3,7 @@ ENV NGINX_VERSION 1.12.0
 # install php exts
 COPY instantclient-basic-linux.x64-12.2.0.1.0.zip ./
 COPY instantclient-sdk-linux.x64-12.2.0.1.0.zip ./
+ENV LD_LIBRARY_PATH /usr/lib/oracle/12.2/client64/lib/
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
         $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata \
