@@ -1,17 +1,15 @@
 FROM php:7.1.6-fpm-alpine
 ENV NGINX_VERSION 1.12.0
-ENV ORACLE_HOME /usr/lib/oracle/12.2/client64/lib/
-ENV BASIC_ZIP instantclient-basic-linux.x64-12.2.0.1.0.zip
-ENV SDK_ZIP instantclient-sdk-linux.x64-12.2.0.1.0.zip
+ENV ORACLE_HOME /usr/lib/oracle/12.2/client64/lib/instantclient_12_2/
 # install php exts
 COPY instantclient-basic-linux.x64-12.2.0.1.0.zip ./
 COPY instantclient-sdk-linux.x64-12.2.0.1.0.zip ./
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
         $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata libaio libmcrypt-dev libaio-dev \
-    && mkdir -p $ORACLE_HOME \
-    && unzip $BASIC_ZIP -d $ORACLE_HOME \
-    && unzip $SDK_ZIP -d $ORACLE_HOME \
+    && mkdir -p /usr/lib/oracle/12.2/client64/lib/ \
+    && unzip instantclient-basic-linux.x64-12.2.0.1.0.zip -d /usr/lib/oracle/12.2/client64/lib/ \
+    && unzip instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /usr/lib/oracle/12.2/client64/lib/ \
     && ln -s /usr/lib/oracle/12.2/client64/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/oracle/12.2/client64/lib/instantclient_12_2/libclntsh.so \
     && ls -l /usr/lib/oracle/12.2/client64/lib/instantclient_12_2 \
     && pecl install oci8 \
