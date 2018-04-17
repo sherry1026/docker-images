@@ -11,9 +11,8 @@ RUN apk update \
     && unzip instantclient-basic-linux.x64-12.2.0.1.0.zip -d /usr/lib/oracle/12.2/client64/lib/ \
     && unzip instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /usr/lib/oracle/12.2/client64/lib/ \
     && ln -s /usr/lib/oracle/12.2/client64/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/oracle/12.2/client64/lib/instantclient_12_2/libclntsh.so \
-    && ls -l /usr/lib/oracle/12.2/client64/lib/instantclient_12_2 \
-    && pecl install oci8 \
     && pecl channel-update pecl.php.net \
+    && pecl install oci8 --with-php-config=/usr/local/bin/php-config --with-oci8=instantclient,/usr/lib/oracle/12.2/client64/lib/instantclient_12_2/ \
     && pecl install mongodb \
     && pecl install redis \
     && docker-php-ext-install opcache bcmath exif mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip \
