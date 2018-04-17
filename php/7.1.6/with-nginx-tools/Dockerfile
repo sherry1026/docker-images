@@ -1,30 +1,28 @@
 FROM php:7.1.6-fpm-alpine
 ENV NGINX_VERSION 1.12.0
+ENV ORACLE_HOME /usr/lib/oracle/12.2/client64/lib/
+ENV BASIC_ZIP instantclient-basic-linux.x64-12.2.0.1.0.zip
+ENV SDK_ZIP instantclient-sdk-linux.x64-12.2.0.1.0.zip
 # install php exts
+COPY instantclient-basic-linux.x64-12.2.0.1.0.zip ./
+COPY instantclient-sdk-linux.x64-12.2.0.1.0.zip ./
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
         $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata libaio libmcrypt-dev libaio-dev \
+    && mkdir -p $ORACLE_HOME \
+    && unzip $BASIC_ZIP -d $ORACLE_HOME \
+    && unzip $SDK_ZIP -d $ORACLE_HOME \
+    && ln -s $ORACLE_HOME/instantclient_12_2/libclntsh.so.12.1 $ORACLE_HOME/instantclient_12_2/libclntsh.so \
+    && pecl install oci8
     && pecl channel-update pecl.php.net \
     && pecl install mongodb \
     && pecl install redis \
     && docker-php-ext-install opcache bcmath exif mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd \
-    && docker-php-ext-enable opcache bcmath exif gd mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip mongodb redis \
+    && docker-php-ext-enable opcache bcmath exif gd mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip mongodb redis oci8 \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" >  /etc/timezone
-
-ENV ORACLE_HOME /usr/lib/oracle/12.2/client64/lib
-ENV BASIC_ZIP instantclient-basic-linux.x64-12.2.0.1.0.zip
-ENV SDK_ZIP instantclient-sdk-linux.x64-12.2.0.1.0.zip
-    
-COPY instantclient-basic-linux.x64-12.2.0.1.0.zip ./
-COPY instantclient-sdk-linux.x64-12.2.0.1.0.zip ./
-RUN mkdir -p $ORACLE_HOME \
-    && unzip $BASIC_ZIP -d $ORACLE_HOME \
-    && unzip $SDK_ZIP -d $ORACLE_HOME \
-    && ln -s $ORACLE_HOME/instantclient_12_2/libclntsh.so.12.1 $ORACLE_HOME/instantclient_12_2/libclntsh.so \
-    && pecl install oci8
 
 # install nginx
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
