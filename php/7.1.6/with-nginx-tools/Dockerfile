@@ -5,7 +5,8 @@ COPY instantclient-basic-linux.x64-12.2.0.1.0.zip ./
 COPY instantclient-sdk-linux.x64-12.2.0.1.0.zip ./
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
-        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata libaio libmcrypt-dev libaio-dev \
+        $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata \
+    && apk add --no-cache libaio libmcrypt-dev libaio-dev \
     && mkdir -p /usr/lib/oracle/12.2/client64/ \
     && unzip instantclient-basic-linux.x64-12.2.0.1.0.zip -d /usr/lib/oracle/12.2/client64/ \
     && unzip instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /usr/lib/oracle/12.2/client64/ \
