@@ -12,7 +12,8 @@ RUN apk update \
     && mkdir -p $ORACLE_HOME \
     && unzip $BASIC_ZIP -d $ORACLE_HOME \
     && unzip $SDK_ZIP -d $ORACLE_HOME \
-    && ln -s $ORACLE_HOME/instantclient_12_2/libclntsh.so.12.1 $ORACLE_HOME/instantclient_12_2/libclntsh.so \
+    && ln -s /usr/lib/oracle/12.2/client64/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/oracle/12.2/client64/lib/instantclient_12_2/libclntsh.so \
+    && ls -l /usr/lib/oracle/12.2/client64/lib/instantclient_12_2 \
     && pecl install oci8 \
     && pecl channel-update pecl.php.net \
     && pecl install mongodb \
