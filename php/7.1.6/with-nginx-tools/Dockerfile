@@ -6,12 +6,13 @@ COPY instantclient-sdk-linux.x64-12.2.0.1.0.zip ./
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
         $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata libaio libmcrypt-dev libaio-dev \
-    && mkdir -p /usr/lib/oracle/12.2/client64/lib/ \
-    && unzip instantclient-basic-linux.x64-12.2.0.1.0.zip -d /usr/lib/oracle/12.2/client64/lib/ \
-    && unzip instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /usr/lib/oracle/12.2/client64/lib/ \
-    && ln -s /usr/lib/oracle/12.2/client64/lib/instantclient_12_2/libclntsh.so.12.1 /usr/lib/oracle/12.2/client64/lib/instantclient_12_2/libclntsh.so \
+    && mkdir -p /usr/lib/oracle/12.2/client64/ \
+    && unzip instantclient-basic-linux.x64-12.2.0.1.0.zip -d /usr/lib/oracle/12.2/client64/ \
+    && unzip instantclient-sdk-linux.x64-12.2.0.1.0.zip -d /usr/lib/oracle/12.2/client64/ \
+    && mv /usr/lib/oracle/12.2/client64/instantclient_12_2 /usr/lib/oracle/12.2/client64/lib \
+    && ln -s /usr/lib/oracle/12.2/client64/lib/libclntsh.so.12.1 /usr/lib/oracle/12.2/client64/lib/libclntsh.so \
     && pecl channel-update pecl.php.net \
-    && pecl install oci8 --with-php-config=/usr/local/bin/php-config --with-oci8=instantclient,/usr/lib/oracle/12.2/client64/lib/instantclient_12_2/ \
+    && pecl install oci8 \
     && pecl install mongodb \
     && pecl install redis \
     && docker-php-ext-install opcache bcmath exif mcrypt mysqli pdo_mysql shmop soap sockets sysvsem xmlrpc zip \
