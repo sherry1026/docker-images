@@ -3,7 +3,7 @@ ENV NGINX_VERSION 1.12.0
 # install php exts
 COPY instantclient-basic-linux.x64-12.2.0.1.0.zip ./
 COPY instantclient-sdk-linux.x64-12.2.0.1.0.zip ./
-ENV LD_LIBRARY_PATH /usr/lib/oracle/12.2/client64/lib/
+ENV LD_LIBRARY_PATH /usr/lib/oracle/12.2/client64/lib/:$LD_LIBRARY_PATH
 RUN apk update \
     && apk add --no-cache --virtual .phpdeps \
         $PHPIZE_DEPS openssl-dev pcre-dev libpng-dev freetype-dev libjpeg-turbo-dev libpng-dev libxml2-dev tzdata \
@@ -135,14 +135,11 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
             | sort -u \
     )" \
     && apk add --no-cache --virtual .nginx-rundeps $runDeps \
-    && apk del .build-deps \
-    && apk del .gettext \
     && mv /tmp/envsubst /usr/local/bin/ \
     \
     # forward request and error logs to docker log collector
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
-    && apk del .phpdeps \
     && rm -rf /tmp/pear/* \
     && rm -rf /var/cache/apk/* \
     && rm -rf /etc/supervisord.conf \
@@ -154,7 +151,8 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
     && adduser -u 555 -D -S -G www www \
     && chmod -R 777 /run \
     && chmod -R 777 /var \
-    && chmod -R 777 /usr/sbin 
+    && chmod -R 777 /usr/sbin \
+    && php -m
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
 COPY supervisord.conf /etc/supervisord.conf
@@ -162,5 +160,6 @@ COPY supervisord.conf /etc/supervisord.conf
 COPY start.sh /start.sh
 
 EXPOSE 9001 80 443 9000
+
 
 ENTRYPOINT ["sh","/start.sh"]
